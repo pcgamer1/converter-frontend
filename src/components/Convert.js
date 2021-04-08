@@ -63,11 +63,18 @@ const Convert = function () {
     form.resetFields()
   }
 
+  const onReset = () => {
+    form.resetFields()
+  }
+
   const downloadStyle = {
     backgroundColor: '#a0d911',
     color: 'white',
     opacity: (isDisabled ? 0 : 1),
-    transition: 'opacity 0.3s'
+    transition: 'opacity 0.3s',
+    width: '85px',
+    paddingLeft: '0px',
+    paddingRight: '0px'
   }
 
   return (
@@ -75,90 +82,103 @@ const Convert = function () {
       <br /> <br />
       <Row>
         <Col span={9} />
-        <Form requiredMark={false} onFinish={submit} form={form}>
-          <br />
-         {
-           formItem({
-            key: 'from',
-            rules: [{required: true, message: 'Please select your input format!'}],
-            kwargs: {
-              placeholder: 'Select',
-              onChange: (val) => {
-                setSelectedFrom(val);
-              },
-              size: 'middle',
-            },
-            type: FORM_ELEMENT_TYPES.SELECT,
-            others: {
-              selectOptions: from
-            },
-            customLabel: 'From',})
-          }
-          <br />
+        <Col span={5}>
+          <Form requiredMark={false} onFinish={submit} form={form}>
+            <br />
           {
             formItem({
-              key: 'to',
+              key: 'from',
               rules: [{required: true, message: 'Please select your input format!'}],
               kwargs: {
                 placeholder: 'Select',
-                size: 'middle',
                 onChange: (val) => {
-                  setSelectedTo(val);
+                  setSelectedFrom(val);
                 },
+                size: 'middle',
               },
               type: FORM_ELEMENT_TYPES.SELECT,
               others: {
-                selectOptions: to
+                selectOptions: from
               },
-              customLabel: 'To',})
-          }
-          <br />
-          {
-            formItem(
-              {
-                key: 'file',
-                rules: [{required: true, message: 'Please upload your file!'}],
+              customLabel: 'From',})
+            }
+            <br />
+            {
+              formItem({
+                key: 'to',
+                rules: [{required: true, message: 'Please select your input format!'}],
                 kwargs: {
-                  onChange(info) {
-                    const {status} = info.file;
-                    if (status !== 'uploading') {
-                      console.log(info.file, info.fileList);
-                    }
-                    if (status === 'done') {
-                      setFile(info.file);
-                      message.success(`${info.file.name} file uploaded successfully.`);
-                    } else if (status === 'error') {
-                      message.error(`${info.file.name} file upload failed.`);
-                    }
-                  },
+                  placeholder: 'Select',
                   size: 'middle',
-                }, 
-                type: FORM_ELEMENT_TYPES.FILE_DRAG_DROP,
-                others: null,
-                customLabel: 'Document',
-              }
-            )
-          }
+                  onChange: (val) => {
+                    setSelectedTo(val);
+                  },
+                },
+                type: FORM_ELEMENT_TYPES.SELECT,
+                others: {
+                  selectOptions: to
+                },
+                customLabel: 'To',})
+            }
+            <br />
+            {
+              formItem(
+                {
+                  key: 'file',
+                  rules: [{required: true, message: 'Please upload your file!'}],
+                  kwargs: {
+                    onChange(info) {
+                      const {status} = info.file;
+                      if (status !== 'uploading') {
+                        console.log(info.file, info.fileList);
+                      }
+                      if (status === 'done') {
+                        setFile(info.file);
+                        message.success(`${info.file.name} file uploaded successfully.`);
+                      } else if (status === 'error') {
+                        message.error(`${info.file.name} file upload failed.`);
+                      }
+                    },
+                    size: 'middle',
+                  }, 
+                  type: FORM_ELEMENT_TYPES.FILE_DRAG_DROP,
+                  others: null,
+                  customLabel: 'Document',
+                }
+              )
+            }
+            <br />
+            <Row>
+              <Col span={3} />
+              <Button 
+                type="primary"
+                htmlType="submit"
+                style={{width: '85px'}}
+              >
+                Convert
+              </Button>
+              <Col span={4} />
+              <Button 
+                type="primary"
+                onClick={onReset}
+                style={{width: '85px'}}
+              >
+                Reset
+              </Button>
+            </Row>
+          <br />
           <br />
           <Row>
-            <Col span={7} />
-          <Button type="primary" htmlType="submit" style={{width: '93px'}}>
-            Convert
-          </Button>
-        </Row>
-        <br />
-        <Row>
-            <Col span={7} />
-          <Button 
-            type="success"
-            htmlType="submit"
-            style={downloadStyle}
-            onClick={onDownload}
-          >
-            Download
-          </Button>
-        </Row>
-        </Form> 
+            <Col span={9} />
+            <Button 
+              style={downloadStyle}
+              onClick={onDownload}
+            >
+              Download
+            </Button>
+          </Row>
+          </Form> 
+        </Col>
       </Row>
     </>
   )
