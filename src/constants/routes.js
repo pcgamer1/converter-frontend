@@ -1,4 +1,10 @@
 import {lazy} from 'react';
+import {
+  SyncOutlined,
+  HistoryOutlined,
+  SmileOutlined
+} from '@ant-design/icons';
+ 
 
 // export const publicRoutes = [
 //   {Component: lazy(() => import('../components/LandingPage')), path: '/'},
@@ -6,18 +12,21 @@ import {lazy} from 'react';
 
 export const innerRoutes = [
   {
-    Component: lazy(() => import('../components/404.js/404.screen')),
+    Component: lazy(() => import('../components/Convert')),
     path: '/convert',
-    name: 'Convert'
+    name: 'Convert',
+    icon: <SyncOutlined/>
   },
   {
     Component: lazy(() => import('../components/404.js/404.screen')),
     path: '/past',
-    name: 'Past Conversions'
+    name: 'Past Conversions',
+    icon: <HistoryOutlined />
   },
   {
-    Component: lazy(() => import('../components/About')),
+    Component: lazy(() => import('../components/404.js/404.screen')),
     path: '/about',
-    name: 'About'
+    name: 'About',
+    icon: <SmileOutlined />
   },
 ]

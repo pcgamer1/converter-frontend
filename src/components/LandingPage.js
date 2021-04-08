@@ -1,15 +1,14 @@
 import React, { useState, Suspense } from 'react'
 import { Menu, Row, Col, PageHeader } from 'antd';
-import { Link } from 'react-router-dom'
-import { MailOutlined, AppstoreOutlined, SettingOutlined } from '@ant-design/icons';
+import { Link, Route } from 'react-router-dom'
 
 import {Loading} from './Loading'
 // const { SubMenu } = Menu;
 
-export const LandingPage = function ({innerRoutes, routeComponents}) {
+export const LandingPage = function ({innerRoutes}) {
 
     const [current, setCurrent] = useState([])
-
+    
     const handleClick = e => {
         console.log('click ', e);
         setCurrent(e.key)
@@ -29,7 +28,7 @@ export const LandingPage = function ({innerRoutes, routeComponents}) {
               {
                 innerRoutes.map((route) => {
                   return (
-                    <Menu.Item key={route.name} icon={<MailOutlined />}>
+                    <Menu.Item key={route.name} icon={route.icon}>
                       <Link to={route.path}>{route.name}</Link>
                     </Menu.Item>
                   )
@@ -37,12 +36,16 @@ export const LandingPage = function ({innerRoutes, routeComponents}) {
               }
 						</Menu>
 					</Row> 
-					<Row>
             <Col span = {8} />
             <Suspense fallback={<Loading />}>
-              {routeComponents}
+              {innerRoutes.map((route, index) => {
+                return (
+                  <Route path={`${route.path}`}>
+                    <route.Component key={index.toString()} {...route.props} />
+                  </Route>
+                )
+              })}
             </Suspense>
-          </Row>
         </>
     );
 }
