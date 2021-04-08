@@ -1,25 +1,23 @@
 import {lazy} from 'react';
 
-export const publicRoutes = [
-  {Component: lazy(() => import('../components/SignInMaster/sign-in-master.component')), path: '/'},
+// export const publicRoutes = [
+//   {Component: lazy(() => import('../components/LandingPage')), path: '/'},
+// ];
+
+export const innerRoutes = [
   {
-    Component: lazy(() => import('../components/SignUp/sign-up-client.component')),
-    path: '/sign-up/client/',
+    Component: lazy(() => import('../components/404.js/404.screen')),
+    path: '/convert',
+    name: 'Convert'
   },
   {
-    Component: lazy(() => import('../components/SignUp/sign-up-employee.component')),
-    path: '/sign-up/employee/',
+    Component: lazy(() => import('../components/404.js/404.screen')),
+    path: '/past',
+    name: 'Past Conversions'
   },
   {
-    path: '*',
-    Component: lazy(() => import('screens/404.screen')),
+    Component: lazy(() => import('../components/About')),
+    path: '/about',
+    name: 'About'
   },
-  {
-    path: '/employee/docket/:id',
-    Component: lazy(() => import('components/Docket/Docket')),
-  },
-  {
-    path: '/employee/return-docket/:id',
-    Component: lazy(() => import('components/ReturnDocket/ReturnDocket')),
-  },
-];
+]

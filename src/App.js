@@ -1,9 +1,9 @@
-import {LandingPage} from './components/landingPage'
+import {RootRouter} from './components/RootRouter'
 
 function App() {
   return (
     <>
-      <LandingPage />
+      <RootRouter />
     </>
   );
 }
