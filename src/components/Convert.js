@@ -6,7 +6,7 @@ import {FORM_ELEMENT_TYPES} from '../constants/formFields'
 import { applyMiddleware } from 'redux';
 import axios from 'axios';
 
-const BASE_URL = 'http://localhost:3001'
+import { BASE_URL } from '../config'
 
 const Convert = function () {
 

@@ -1,12 +1,13 @@
 // import * as jwtDecode from 'jwt-decode';
 import axios from 'axios';
 
+import {BASE_URL} from '../config'
 // import { ACCESS_TOKEN, REFRESH_TOKEN } from '../constants/storage';
 // import { DEFAULT_BASE_URL } from '../constants/enviroment';
 
 // import { getStorage } from './shared';
 
-axios.defaults.baseURL = 'http://localhost:3001';
+axios.defaults.baseURL = BASE_URL;
 
 // const getAccessToken = async () => {
 //   const storage = getStorage();
