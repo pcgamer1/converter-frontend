@@ -46,7 +46,6 @@ const Convert = function () {
       console.log(resp.data.data)
       setResult(JSON.stringify(resp.data.data))
       setIsDisabled(false)
-      form.resetFields()
     })
   }
 
@@ -61,6 +60,7 @@ const Convert = function () {
     a.click();
     document.body.removeChild(a);
     setIsDisabled(true)
+    form.resetFields()
   }
 
   const downloadStyle = {
