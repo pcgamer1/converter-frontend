@@ -141,14 +141,14 @@ const Convert = function () {
           }
           <br />
           <Row>
-            <Col span={6} />
+            <Col span={7} />
           <Button type="primary" htmlType="submit" style={{width: '93px'}}>
             Convert
           </Button>
         </Row>
         <br />
         <Row>
-            <Col span={6} />
+            <Col span={7} />
           <Button 
             type="success"
             htmlType="submit"
