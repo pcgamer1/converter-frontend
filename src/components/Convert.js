@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react'
-import { Row, Col, Form, Button, message } from 'antd';
+import { Row, Col, Form, Button, message, Spin } from 'antd';
 import  { useAPI } from '../hooks/api'
 import formItem from '../helpers/formItem'
 import {FORM_ELEMENT_TYPES} from '../constants/formFields'
-import { applyMiddleware } from 'redux';
 import axios from 'axios';
 
 import { BASE_URL } from '../config'
@@ -17,6 +16,7 @@ const Convert = function () {
   const [selectedTo, setSelectedTo] = useState()
   const [result, setResult] = useState()
   const [isDisabled, setIsDisabled] = useState(true)
+  const [loading, setLoading] = useState(false)
   const [form] = Form.useForm();
 
   const { data: mapping } = useAPI('/mapping', {});
@@ -38,27 +38,34 @@ const Convert = function () {
     const req = new FormData()
     req.append('file', data['file'])
 
-    axios.post(BASE_URL + '/converter', req, { params: {
+    if(process.env.NODE_ENV != 'production') {
+      axios.defaults.baseURL = BASE_URL
+    }
+
+    setLoading(true);
+
+    axios.post('/converter', req, { params: {
       type: 'string',
       format: data['from'],
       convertTo: data['to']
     }}).then((resp) => {
       console.log(resp.data.data)
       setResult(JSON.stringify(resp.data.data))
+      setLoading(false)
       setIsDisabled(false)
     })
   }
 
   const onDownload = () => {
     var blob1 = new Blob([result], { type: "text/plain;charset=utf-8" })
-    var url = window.URL || window.webkitURL;
-    var link = url.createObjectURL(blob1);
-    var a = document.createElement("a");
-    a.download = `${selectedFrom}-${selectedTo}`;
+    var url = window.URL || window.webkitURL
+    var link = url.createObjectURL(blob1)
+    var a = document.createElement("a")
+    a.download = `${selectedFrom}-${selectedTo}`
     a.href = link;
-    document.body.appendChild(a);
+    document.body.appendChild(a)
     a.click();
-    document.body.removeChild(a);
+    document.body.removeChild(a)
     setIsDisabled(true)
     form.resetFields()
   }
@@ -92,7 +99,7 @@ const Convert = function () {
               kwargs: {
                 placeholder: 'Select',
                 onChange: (val) => {
-                  setSelectedFrom(val);
+                  setSelectedFrom(val)
                 },
                 size: 'middle',
               },
@@ -111,7 +118,7 @@ const Convert = function () {
                   placeholder: 'Select',
                   size: 'middle',
                   onChange: (val) => {
-                    setSelectedTo(val);
+                    setSelectedTo(val)
                   },
                 },
                 type: FORM_ELEMENT_TYPES.SELECT,
@@ -130,13 +137,16 @@ const Convert = function () {
                     onChange(info) {
                       const {status} = info.file;
                       if (status !== 'uploading') {
-                        console.log(info.file, info.fileList);
+                        console.log(info.file, info.fileList)
                       }
                       if (status === 'done') {
-                        setFile(info.file);
-                        message.success(`${info.file.name} file uploaded successfully.`);
+                        message.success(`${info.file.name} file uploaded successfully.`)
+                        setLoading(false)
                       } else if (status === 'error') {
-                        message.error(`${info.file.name} file upload failed.`);
+                        message.error(`${info.file.name} file upload failed.`)
+                      }
+                      else {
+                        setLoading(true)
                       }
                     },
                     size: 'middle',
@@ -167,16 +177,24 @@ const Convert = function () {
               </Button>
             </Row>
           <br />
-          <br />
-          <Row>
-            <Col span={9} />
-            <Button 
-              style={downloadStyle}
-              onClick={onDownload}
-            >
-              Download
-            </Button>
-          </Row>
+          {
+            loading ? (
+              <Row>
+                <Col span={12} />
+                <Spin />         
+              </Row>
+            ) : (
+              <Row>
+                <Col span={9} />
+                <Button 
+                  style={downloadStyle}
+                  onClick={onDownload}
+                >
+                  Download
+                </Button>
+              </Row>
+            )
+          }
           </Form> 
         </Col>
       </Row>
