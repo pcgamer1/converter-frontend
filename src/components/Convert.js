@@ -5,7 +5,7 @@ import formItem from '../helpers/formItem'
 import {FORM_ELEMENT_TYPES} from '../constants/formFields'
 import axios from 'axios';
 
-import { BASE_URL } from '../config'
+import { BASE_URL, LOCAL_BASE_URL } from '../config'
 
 const Convert = function () {
 
@@ -23,12 +23,14 @@ const Convert = function () {
 
   useEffect(() => {
     if (mapping) {
+      console.log(mapping)
       setFrom(Object.keys(mapping))
     }
   }, [mapping])
   
   useEffect(() => {
     if(selectedFrom) {
+      console.log(Object.keys(mapping[selectedFrom]))
       setTo(Object.keys(mapping[selectedFrom]))
     }
   }, [selectedFrom])
@@ -39,6 +41,9 @@ const Convert = function () {
     req.append('file', data['file'])
 
     if(process.env.NODE_ENV != 'production') {
+      axios.defaults.baseURL = LOCAL_BASE_URL
+    }
+    else {
       axios.defaults.baseURL = BASE_URL
     }
 
@@ -50,16 +55,20 @@ const Convert = function () {
       convertTo: data['to']
     }}).then((resp) => {
       console.log(resp.data.data)
-      setResult(JSON.stringify(resp.data.data))
+      setResult(resp.data.data)
       setLoading(false)
       setIsDisabled(false)
     })
   }
 
   const onDownload = () => {
-    var blob1 = new Blob([result], { type: "text/plain;charset=utf-8" })
+    var blob
+    if(typeof result == 'object') 
+      blob = new Blob([JSON.stringify(result)], { type: "application/json" })
+    else
+      blob = new Blob([result], { type: "text/plain;charset=utf-8" })
     var url = window.URL || window.webkitURL
-    var link = url.createObjectURL(blob1)
+    var link = url.createObjectURL(blob)
     var a = document.createElement("a")
     a.download = `${selectedFrom}-${selectedTo}`
     a.href = link;

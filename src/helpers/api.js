@@ -1,8 +1,11 @@
 import axios from 'axios';
 
-import {BASE_URL} from '../config'
+import {BASE_URL, LOCAL_BASE_URL} from '../config'
 
 if(process.env.NODE_ENV != 'production') {
+  axios.defaults.baseURL = LOCAL_BASE_URL
+}
+else {
   axios.defaults.baseURL = BASE_URL
 }
 
